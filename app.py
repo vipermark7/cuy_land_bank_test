@@ -19,10 +19,6 @@ with open('parsed.xml') as p:
 # parsed_json will just be used for outputting to the screen
 parsed_json = json.dumps(doc, indent=4, sort_keys=True)
 
-
-# f = open(parsed_json)
-# data = json.load(f)
-
 # data['html']['body']['lbstream']['parcelid']['source'][0]['record']['latitude']['value'] to get latitude value
 parcel_data = doc['html']['body']['lbstream']['parcelid']['source'][0]
 lats = set()
@@ -39,7 +35,7 @@ app = Flask(__name__)
 
 @app.route('/json')
 def print_json():
-    """Returns formatted JSON to the user"""
+    """Uses jsonify() to return formatted JSON to the user"""
     return jsonify(doc)
 
 
