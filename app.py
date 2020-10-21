@@ -17,9 +17,6 @@ parsed_xml = Soup(raw_url_data, "lxml")
 with open('parsed.xml') as p:
     doc = xmltodict.parse(p.read(), process_namespaces=True)
 
-# parsed_json will just be used for outputting to the screen
-parsed_json = json.dumps(doc, indent=4, sort_keys=True)
-
 # data['html']['body']['lbstream']['parcelid']['source'][0]['record']['latitude']['value'] to get latitude value
 parcel_data = doc['html']['body']['lbstream']['parcelid']['source'][0]['record']
 lats = []
@@ -37,30 +34,25 @@ for i in longs:
     latlongs.add(i)
 
 # passing coordinates into GoogleMapsPlotter
-api_key = "AIzaSyCEKNzRQsT0ztBlDvRRJsGWSjHKUnvkYgA"
+# commenting this code out as it changes the html file every time it runs
+#api_key = "AIzaSyDjF1arEQu74T0GWqcBbKO8gGhYTNIC6F8"
 
-map1 = gmplotter(lats[0], longs[0], zoom=14, apikey=api_key)
-map2 = gmplotter(lats[1], longs[1], zoom=14, apikey=api_key)
-maps = [map1, map2]
-for i in maps:
-    i.draw('templates/index.html')
+#map1 = gmplotter(lats[0], longs[0], zoom=14, apikey=api_key)
+#map2 = gmplotter(lats[1], longs[1], zoom=14, apikey=api_key)
+#maps = [map1, map2]
+#for i in maps:
+#    i.draw('templates/index.html')
 app = Flask(__name__)
 
 
 @app.route('/json')
 def print_json():
-    """Uses jsonify() to return the full formatted JSON document to the user"""
-    return jsonify(doc)
+    """Uses jsonify() to return the parcel data in JSON to the user"""
+    return jsonify(parcel_data)
 
 
 @app.route('/')
 def show_map():
     """Shows view with data from Google Maps API and relevant JSON data from the XML stream"""
     print(latlongs)
-    return render_template('index.html', coords=latlongs, maps=maps)
-
-
-@app.route('/latlong')
-def print_lat_and_long():
-    """Prints latitude and longitude data from our JSON data"""
-
+    return render_template('index.html', coords=latlongs, parceldata=parcel_data)
