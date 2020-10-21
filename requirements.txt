@@ -1,2 +1,5 @@
 defusedxml==0.6.0
 Flask==1.1.2
+lxml==4.5.2
+xmltodict==0.12.0
+gmplot==1.4.1
